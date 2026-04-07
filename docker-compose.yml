@@ -19,7 +19,7 @@ services:
     labels:
       - traefik.http.services.openclaw.loadbalancer.server.port=8181
       - traefik.http.middlewares.openclaw-stream.headers.customresponseheaders.X-Accel-Buffering=no
-      - traefik.http.routers.https-0-uxt9xg7jbfcyjvwmfs4y1n4z-openclaw.middlewares=gzip,openclaw-stream
+      - traefik.http.routers.https-0-uxt9xg7jbfcyjvwmfs4y1n4z-openclaw.middlewares=openclaw-stream
     volumes:
       - openclaw-data:/data
     depends_on:

@@ -5,37 +5,32 @@ services:
       - "${PORT:-8080}:${PORT:-8080}"
     environment:
       # Provider (at least one required)
-      #- ANTHROPIC_API_KEY=sk-ant-...
-      - OPENCODE_API_KEY=${OPENCODE_API_KEY}
-      - OPENCLAW_PRIMARY_MODEL=opencode/kimi-k2.5
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENCLAW_PRIMARY_MODEL=${OPENCLAW_PRIMARY_MODEL:-claude-sonnet-4-6}
       # Auth
       - AUTH_USERNAME=${AUTH_USERNAME:-admin}
       - AUTH_PASSWORD=${AUTH_PASSWORD}
       - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+      # CORS
+      - OPENCLAW_ALLOWED_ORIGINS=${OPENCLAW_ALLOWED_ORIGINS}
+      # Channels
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       # Browser sidecar
-      - BROWSER_CDP_URL=http://browser:9223
+      - BROWSER_CDP_URL=http://browser:9222
       - BROWSER_DEFAULT_PROFILE=openclaw
       - BROWSER_EVALUATE_ENABLED=true
-      # CORS / Allowed Origins (optional)
-      # - OPENCLAW_ALLOWED_ORIGINS=http://localhost:5173,https://app.example.com
-      # Dot-notation config (optional - for settings not covered by dedicated env vars)
-      # - OPENCLAW__channels__telegram__textChunkLimit=3500
-      # JSON config via env var (optional - partial or full config as JSON)
-      # - OPENCLAW_CONFIG_JSON={"agents":{"defaults":{"model":{"fallback":"gemini/gemini-3-pro"}}}}
       # Hooks (optional)
       # - HOOKS_ENABLED=true
       # - HOOKS_TOKEN=my-hook-secret
     volumes:
       - openclaw-data:/data
-      # Optional: custom JSON config for complex settings (groups, plugins, etc.)
-      # - ./my-openclaw.json:/app/config/openclaw.json
     depends_on:
       - browser
     restart: unless-stopped
 
   browser:
     image: coollabsio/openclaw-browser:latest
-    # No port exposure needed — proxied via openclaw at /browser/
     environment:
       - PUID=1000
       - PGID=1000

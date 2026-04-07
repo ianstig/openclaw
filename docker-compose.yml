@@ -2,12 +2,13 @@ services:
   openclaw:
     image: coollabsio/openclaw:latest
     ports:
-      - "${PORT:-8080}:${PORT:-8080}"
+      - "8181:8181"
     environment:
+      - PORT=8181
       # Provider (at least one required)
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - OPENCLAW_PRIMARY_MODEL=${OPENCLAW_PRIMARY_MODEL:-claude-sonnet-4-6}
+      - OPENCLAW_PRIMARY_MODEL=${OPENCLAW_PRIMARY_MODEL:-anthropic/claude-sonnet-4-6}
       # Auth
       - AUTH_USERNAME=${AUTH_USERNAME:-admin}
       - AUTH_PASSWORD=${AUTH_PASSWORD}
@@ -20,9 +21,6 @@ services:
       - BROWSER_CDP_URL=http://browser:9222
       - BROWSER_DEFAULT_PROFILE=openclaw
       - BROWSER_EVALUATE_ENABLED=true
-      # Hooks (optional)
-      # - HOOKS_ENABLED=true
-      # - HOOKS_TOKEN=my-hook-secret
     volumes:
       - openclaw-data:/data
     depends_on:
